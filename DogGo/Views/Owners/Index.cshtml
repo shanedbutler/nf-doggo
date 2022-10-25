@@ -6,13 +6,6 @@
 
 <h1>Index</h1>
 
-
-@foreach (Owner owner in Model)
-{
-    <li>@owner.Name</li>
-}
-
-@*
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -62,12 +55,11 @@
                 @Html.DisplayFor(modelItem => item.NeighborhoodId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id  }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id  })
             </td>
         </tr>
 }
     </tbody>
 </table>
-*@
