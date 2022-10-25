@@ -55,21 +55,30 @@ namespace DogGo.Controllers
         // GET: DogController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var dog = _dogRepo.GetDog(id);
+
+            if (dog == null)
+            {
+                return NotFound();
+            }
+
+            return View(dog);
         }
 
         // POST: DogController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Dog dog)
         {
             try
             {
+                _dogRepo.UpdateDog(dog);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(dog);
             }
         }
 
