@@ -76,7 +76,7 @@ namespace DogGo.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT
-                        Id, [Name], Breed, Notes, OwnerId
+                        Id, [Name], Breed, Notes, OwnerId, ImageUrl
                         FROM Dog
                         WHERE Id = @id";
 
@@ -124,7 +124,7 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO Dog ([Name], Breed, Notes, OwnerId)
+                    INSERT INTO Dog ([Name], Breed, Notes, OwnerId, ImageUrl)
                     OUTPUT INSERTED.ID
                     VALUES (@name, @breed, @notes, @ownerId, @imageUrl);
                 ";
