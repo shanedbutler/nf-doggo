@@ -6,12 +6,7 @@
 
 <h1>Index</h1>
 
-@foreach (Walker walker in Model)
-{
-    <li>@walker.Name</li>
-}
-
-@*<p>
+<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -34,8 +29,8 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
+            <tr>
+                <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
@@ -45,15 +40,23 @@
                 @Html.DisplayFor(modelItem => item.NeighborhoodId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
+                    @if (String.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="https://cdn.pixabay.com/photo/2014/04/03/11/47/avatar-312160_640.png"
+                     class="card-img-top"
+                     alt="Walker" />
+                    }
+                    else
+                    {
+                        <img src="@item.ImageUrl" class="card-img-top" alt="Walker" />
+                    }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
+                @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
             </td>
         </tr>
 }
     </tbody>
 </table>
-*@
