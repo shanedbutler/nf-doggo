@@ -160,9 +160,13 @@ namespace DogGo.Repositories
                         cmd.Parameters.AddWithValue("@imageUrl", "");
                     }
 
+                    // Alternative approach to deal with nullable columns. "Null-coalescing operator"
+                    //cmd.Parameters.AddWithValue("@notes", dog.Notes ?? "No notes");
+                    //cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl ?? "");
+
                     int id = (int)cmd.ExecuteScalar();
 
-                    dog.Id = id;
+                    dog.Id = id; 
                 }
             }
         }

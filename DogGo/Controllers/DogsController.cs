@@ -1,9 +1,11 @@
 ﻿using DogGo.Models;
 using DogGo.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace DogGo.Controllers
 {
@@ -17,9 +19,13 @@ namespace DogGo.Controllers
         }
 
         // GET: DogController
+        [Authorize]
         public ActionResult Index()
         {
-            List<Dog> dogs = _dogRepo.GetAllDogs();
+            int ownerId = GetCurrentUserId();
+
+            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(ownerId);
+
             return View(dogs);
         }
 
@@ -30,6 +36,7 @@ namespace DogGo.Controllers
         }
 
         // GET: DogController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -42,6 +49,9 @@ namespace DogGo.Controllers
         {
             try
             {
+                // Update the dogs OwnerId to the current user's Id 
+                dog.OwnerId = GetCurrentUserId();
+
                 _dogRepo.AddDog(dog);
 
                 return RedirectToAction("Index");
@@ -55,9 +65,11 @@ namespace DogGo.Controllers
         // GET: DogController/Edit/5
         public ActionResult Edit(int id)
         {
+            int ownerId = GetCurrentUserId();
+
             var dog = _dogRepo.GetDog(id);
 
-            if (dog == null)
+            if (dog == null || dog.OwnerId != ownerId)
             {
                 return NotFound();
             }
@@ -85,7 +97,15 @@ namespace DogGo.Controllers
         // GET: DogController/Delete/5
         public ActionResult Delete(int id)
         {
-            Dog dog = _dogRepo.GetDog(id);
+            int ownerId = GetCurrentUserId();
+
+            var dog = _dogRepo.GetDog(id);
+
+            if (dog == null || dog.OwnerId != ownerId)
+            {
+                return NotFound();
+            }
+
             return View(dog);
         }
 
@@ -103,6 +123,13 @@ namespace DogGo.Controllers
             {
                 return View(dog);
             }
+        }
+
+        // Helper method for authorization use
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
